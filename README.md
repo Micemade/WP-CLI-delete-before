@@ -80,7 +80,7 @@ wp delete-before attachment inherit 2018 12 31
 
 The plugin is organized as follows:
 
-- [`index.php`](index.php ): Main plugin file that loads the autoloader and registers the command.
+- [`wp-cli-delete-before.php`](wp-cli-delete-before.php ): Main plugin file that loads the autoloader and registers the command.
 - [`includes/DeleteBeforeCommand.php`](includes/DeleteBeforeCommand.php ): Core command class handling validation, querying, and deletion logic.
 - [`includes/DeleteBeforeRegistrar.php`](includes/DeleteBeforeRegistrar.php ): Registers the WP-CLI command.
 - [`includes/DeleteBeforeFactory.php`](includes/DeleteBeforeFactory.php ): Factory for creating command instances from CLI arguments.
