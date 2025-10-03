@@ -2,7 +2,7 @@
 /**
  * Factory for creating DeleteBeforeCommand instances from command line arguments.
  *
- * @package micemade-wpcli-delete-before
+ * @package wp-cli-delete-before
  * @since 1.0.0
  */
 declare(strict_types=1);

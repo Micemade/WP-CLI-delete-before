@@ -5,7 +5,7 @@
  * It includes validation for post type, post status, date, and date column.
  * The command can be executed with parameters for post type, post status, year, month, day, number of posts to delete, and the date column to use.
  *
- * @package micemade-wpcli-delete-before
+ * @package wp-cli-delete-before
  * @since 1.0.0
  */
 declare(strict_types=1);
@@ -27,7 +27,7 @@ class DeleteBeforeCommand {
 	private int $day;
 	private int|string $posts_num;
 	private string $post_date_column;
-	private string $textdomain = 'micemade-wpcli-delete-before';
+	private string $textdomain = 'wp-cli-delete-before';
 
 	public function __construct(
 		string $post_type,

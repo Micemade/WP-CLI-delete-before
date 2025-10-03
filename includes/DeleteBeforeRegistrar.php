@@ -17,7 +17,7 @@
  * - The command provides feedback on the deletion process, including the number of successful and failed deletions.
  * - The command is only available when WP-CLI is defined and active.
  *
- * @package micemade-wpcli-delete-before
+ * @package wp-cli-delete-before
  * @since 1.0.0
  */
 declare(strict_types=1);
@@ -37,7 +37,7 @@ class DeleteBeforeRegistrar
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			WP_CLI::add_command( 'delete-before', function ( $args, $assoc_args ) {
 				if ( empty( $args ) || count( $args ) !== 5 ) {
-					WP_CLI::error( __( 'Parameters: POST TYPE, POST STATUS, YEAR, MONTH and DAY are required (in this exact order). Please check your parameters. Command syntax is: wp delete-before <post_type> <post_status> <year> <month> <day> < --number=100 > < --date=post_date >.', 'micemade-wpcli-delete-before' ) );
+					WP_CLI::error( __( 'Parameters: POST TYPE, POST STATUS, YEAR, MONTH and DAY are required (in this exact order). Please check your parameters. Command syntax is: wp delete-before <post_type> <post_status> <year> <month> <day> < --number=100 > < --date=post_date >.', 'wp-cli-delete-before' ) );
 					return;
 				}
 

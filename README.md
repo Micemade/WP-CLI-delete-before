@@ -2,6 +2,8 @@
 
 A WordPress plugin that provides a WP-CLI command to delete posts (or custom post types) of a specified type and status that were created before a given date. This tool is useful for bulk cleanup of old content, such as drafts, attachments, or outdated posts.
 
+> **DISCLAIMER: use the WP-CLI command described below with caution and at your own risk. It deletes entries in the database and files in the server, so it may make your site unusable. Testing and backing up the site before using it, especially on a production server, is highly recommended.**
+
 ## Features
 
 - Deletes posts based on post type, status, and date criteria.
