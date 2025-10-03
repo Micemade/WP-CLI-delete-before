@@ -31,8 +31,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 use WP_CLI;
 use WP_Query;
 
-class DeleteBeforeRegistrar
-{
+class DeleteBeforeRegistrar {
+
+	/**
+	 * Registers the 'delete-before' command with WP-CLI.
+	 *
+	 * This method checks if WP-CLI is available and registers the command handler.
+	 * The command handler validates arguments, creates a command instance via the factory,
+	 * and executes the deletion process.
+	 *
+	 * @return void
+	 */
 	public static function register(): void {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			WP_CLI::add_command( 'delete-before', function ( $args, $assoc_args ) {

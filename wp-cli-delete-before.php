@@ -19,4 +19,13 @@ $plugin_autoload = plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 if ( file_exists( $plugin_autoload ) ) {
 	require_once $plugin_autoload;
 	Micemade\WPCliDeleteBefore\DeleteBeforeRegistrar::register();
+} else {
+	add_action(
+		'admin_notices',
+		function() {
+			echo '<div class="notice notice-error"><p>' .
+				esc_html__( 'Plugin autoload file is missing. Run the composer install command first.', 'wp-cli-delete-before' ) .
+				'</p></div>';
+		}
+	);
 }

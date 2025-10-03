@@ -24,7 +24,7 @@ A WordPress plugin that provides a WP-CLI command to delete posts (or custom pos
 1. Download or clone the plugin into your WordPress plugins directory:
    ```
    cd wp-content/plugins
-   git clone https://github.com/your-repo/wp-cli-delete-before.git
+   git clone https://github.com/Micemade/WP-CLI-delete-before.git
    ```
 
 2. Install dependencies using Composer:

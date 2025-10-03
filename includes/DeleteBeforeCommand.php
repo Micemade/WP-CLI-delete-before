@@ -20,15 +20,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class DeleteBeforeCommand {
+
+	/** @var string The post type to delete. */
 	private string $post_type;
+
+	/** @var string The post status to delete. */
 	private string $post_status;
+
+	/** @var int The year for the cutoff date. */
 	private int $year;
+
+	/** @var int The month for the cutoff date. */
 	private int $month;
+
+	/** @var int The day for the cutoff date. */
 	private int $day;
+
+	/** @var int|string Maximum number of posts to delete. */
 	private int|string $posts_num;
+
+	/** @var string Date column to use for comparison. */
 	private string $post_date_column;
+
+	/** @var string Text domain for translations. */
 	private string $textdomain = 'wp-cli-delete-before';
 
+	/**
+	 * Constructor for DeleteBeforeCommand.
+	 *
+	 * @param string $post_type The post type to delete.
+	 * @param string $post_status The post status to delete.
+	 * @param int $year The year for the cutoff date.
+	 * @param int $month The month for the cutoff date.
+	 * @param int $day The day for the cutoff date.
+	 * @param int|string $posts_num Maximum number of posts to delete (default -1 for all).
+	 * @param string $post_date_column Date column to use for comparison (default 'post_date_gmt').
+	 */
 	public function __construct(
 		string $post_type,
 		string $post_status,
@@ -47,15 +74,22 @@ class DeleteBeforeCommand {
 		$this->post_date_column = $post_date_column;
 	}
 
+	/**
+	 * Executes the delete before command.
+	 *
+	 * @param array $assoc_args Associative arguments passed to the command.
+	 * @return void
+	 */
 	public function run(array $assoc_args = []): void {
-		// Validations
+
+		// Validations.
 		$this->validate_post_type();
 		$this->validate_post_status();
 		$this->normalize_attachment_status();
 		$this->validate_date();
 		$this->validate_column();
 
-		// Logging overview
+		// Logging overview.
 		$pt_obj = get_post_type_object( $this->post_type );
 		$plural = $pt_obj ? $pt_obj->labels->name : $this->post_type;
 		WP_CLI::log(
@@ -92,12 +126,22 @@ class DeleteBeforeCommand {
 		$this->process_deletion( $query );
 	}
 
+	/**
+	 * Validates the post type.
+	 *
+	 * @return void
+	 */
 	private function validate_post_type(): void {
 		if ( ! post_type_exists( $this->post_type ) ) {
 			WP_CLI::error( sprintf( __( 'There is no "%s" post type, please check the "post_type" parameter.', $this->textdomain ), $this->post_type ) );
 		}
 	}
 
+	/**
+	 * Validates the post status.
+	 *
+	 * @return void
+	 */
 	private function validate_post_status(): void {
 		$statuses = get_available_post_statuses();
 		if ( ! in_array( $this->post_status, $statuses, true ) ) {
@@ -105,6 +149,11 @@ class DeleteBeforeCommand {
 		}
 	}
 
+	/**
+	 * Normalizes the post status for attachments to 'inherit'.
+	 *
+	 * @return void
+	 */
 	private function normalize_attachment_status(): void {
 		if ( 'attachment' === $this->post_type && 'inherit' !== $this->post_status ) {
 			WP_CLI::log( sprintf( __( 'Attachments can have only "inherit" post status. Argument "%s" changed to "inherit"', $this->textdomain ), $this->post_status ) );
@@ -112,12 +161,22 @@ class DeleteBeforeCommand {
 		}
 	}
 
+	/**
+	 * Validates the provided date.
+	 *
+	 * @return void
+	 */
 	private function validate_date(): void {
 		if ( ! checkdate( (int) $this->month, (int) $this->day, (int) $this->year ) ) {
 			WP_CLI::error( sprintf( __( 'You entered a non valid date, which do not exist in Gregorian calendar. Year: %1$s, Month: %2$s, Day: %3$s. Please check the date you entered.', $this->textdomain ), $this->year, $this->month, $this->day ) );
 		}
 	}
 
+	/**
+	 * Validates the date column.
+	 *
+	 * @return void
+	 */
 	private function validate_column(): void {
 		$allowed = [ 'post_date_gmt', 'post_modified_gmt', 'post_date', 'post_modified' ];
 		if ( ! in_array( $this->post_date_column, $allowed, true ) ) {
@@ -125,6 +184,11 @@ class DeleteBeforeCommand {
 		}
 	}
 
+	/**
+	 * Builds and returns the WP_Query for fetching posts to delete based on the command parameters.
+	 *
+	 * @return WP_Query The query object.
+	 */
 	private function get_query(): WP_Query {
 		$args = [
 			'fields'         => 'ids',
@@ -139,16 +203,22 @@ class DeleteBeforeCommand {
 					'day'   => $this->day,
 				],
 			],
-			'no_found_rows'  => false, // need found_posts
+			'no_found_rows'  => false, // need found_posts.
 		];
 
 		return new WP_Query( $args );
 	}
 
+	/**
+	 * Processes the deletion of posts returned by the query.
+	 *
+	 * @param WP_Query $query The query object containing posts to delete.
+	 * @return void
+	 */
 	private function process_deletion( WP_Query $query ): void {
 		$successful = 0;
 		$failed = 0;
-		$ids = $query->posts; // because 'fields' => 'ids' we get IDs array
+		$ids = $query->posts; // because 'fields' => 'ids' we get IDs array.
 
 		// Iterate IDs directly — avoids setting global postdata repeatedly.
 		foreach ( $ids as $id ) {
@@ -192,6 +262,11 @@ class DeleteBeforeCommand {
 		wp_reset_postdata();
 	}
 
+	/**
+	 * Retrieves the singular label for the post type.
+	 *
+	 * @return string The singular label of the post type.
+	 */
 	private function get_singular_label(): string {
 		$obj = get_post_type_object( $this->post_type );
 		return $obj ? $obj->labels->singular_name : $this->post_type;
